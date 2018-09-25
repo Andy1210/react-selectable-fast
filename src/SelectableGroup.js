@@ -432,21 +432,10 @@ class SelectableGroup extends Component {
       target: e.target,
     }
 
-    e.preventDefault()
-
     document.addEventListener('mousemove', this.openSelectbox)
     document.addEventListener('touchmove', this.openSelectbox)
     document.addEventListener('mouseup', this.mouseUp)
     document.addEventListener('touchend', this.mouseUp)
-  }
-
-  preventEvent(target, type) {
-    const preventHandler = e => {
-      target.removeEventListener(type, preventHandler, true)
-      e.preventDefault()
-      e.stopPropagation()
-    }
-    target.addEventListener(type, preventHandler, true)
   }
 
   mouseUp = event => {
@@ -471,10 +460,6 @@ class SelectableGroup extends Component {
       }
       this.selectedItems = new Set([...this.selectedItems, ...this.selectingItems])
       this.selectingItems.clear()
-
-      if (e.which === 1 && this.mouseDownData.target === e.target) {
-        this.preventEvent(e.target, 'click')
-      }
 
       this.selectbox.setState({
         isBoxSelecting: false,
@@ -509,13 +494,6 @@ class SelectableGroup extends Component {
         { click: true }
       )
       this.props.onSelectionFinish([...this.selectedItems], this.clickedItem)
-
-      if (e.which === 1) {
-        this.preventEvent(e.target, 'click')
-      }
-      if (e.which === 2 || e.which === 3) {
-        this.preventEvent(e.target, 'contextmenu')
-      }
     }
   }
 
